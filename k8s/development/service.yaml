@@ -1,0 +1,17 @@
+# k8s/development/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: container-dashboard
+  namespace: default
+spec:
+  selector:
+    app: container-dashboard
+  ports:
+    - name: backend
+      port: 3000
+      targetPort: 3000
+    - name: frontend
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
