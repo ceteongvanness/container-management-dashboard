@@ -1,4 +1,4 @@
-// frontend/src/utils/api.ts
+// src/utils/api.ts
 import axios from 'axios';
 
 const api = axios.create({
@@ -8,6 +8,7 @@ const api = axios.create({
   },
 });
 
+// Add a request interceptor
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
