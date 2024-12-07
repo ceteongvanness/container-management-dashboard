@@ -1,302 +1,204 @@
-# Container Management Dashboard
+# Bloomberg PaaS-Style Container Management Dashboard
 
-A modern container management dashboard built with TypeScript, React, and NestJS, offering real-time monitoring and management of Kubernetes deployments.
+## Overview
+A modern container management dashboard that demonstrates cloud-native development practices and container orchestration capabilities. This project showcases a scalable Platform-as-a-Service (PaaS) architecture similar to enterprise-grade container management systems.
 
-## API Documentation
+## Features
+- 🔄 Real-time container metrics monitoring
+- 🚀 Kubernetes deployment management
+- 📊 Resource usage tracking and visualization
+- 👥 Multi-tenant support
+- 🔐 Role-based access control
+- 📈 Real-time metrics using WebSocket
+- 📝 OpenAPI documentation
+- 🔄 CI/CD pipeline integration
 
-### Authentication API
-```typescript
-POST /auth/login
-{
-  "username": string,
-  "password": string
-}
-
-GET /auth/profile
-Authorization: Bearer {token}
-```
-
-### Deployments API
-```typescript
-GET /deployments
-Authorization: Bearer {token}
-
-POST /deployments
-Authorization: Bearer {token}
-{
-  "name": string,
-  "image": string,
-  "replicas": number,
-  "resources": {
-    "limits": { "cpu": string, "memory": string },
-    "requests": { "cpu": string, "memory": string }
-  }
-}
-
-PUT /deployments/:name
-DELETE /deployments/:name
-GET /deployments/:name/logs
-POST /deployments/:name/scale
-```
-
-### Metrics API
-```typescript
-GET /metrics
-GET /metrics/summary
-GET /metrics/history?duration=1h
-```
+## Tech Stack
+- **Backend:**
+  - NestJS (TypeScript)
+  - Kubernetes Client Library
+  - WebSocket for real-time updates
+  - Jest for testing
+  
+- **Frontend:**
+  - React/Next.js
+  - TypeScript
+  - TailwindCSS
+  - Recharts for metrics visualization
+  
+- **Infrastructure:**
+  - Docker
+  - Kubernetes
+  - Redis for caching
+  - PostgreSQL for persistent storage
 
 ## Project Structure
 ```
 container-management-dashboard/
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+│
 ├── backend/
 │   ├── src/
 │   │   ├── auth/
+│   │   │   ├── decorators/
+│   │   │   │   └── roles.decorator.ts
+│   │   │   ├── guards/
+│   │   │   │   └── roles.guard.ts
+│   │   │   └── auth.service.ts
 │   │   ├── controllers/
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── deployment.controller.ts
+│   │   │   └── metrics.controller.ts
 │   │   ├── services/
+│   │   │   ├── kubernetes.service.ts
+│   │   │   └── metrics.service.ts
+│   │   ├── middleware/
+│   │   │   └── auth.middleware.ts
+│   │   ├── metrics/
+│   │   │   └── metrics.gateway.ts
 │   │   └── types/
+│   │       └── types.ts
 │   ├── test/
-│   └── package.json
+│   │   ├── auth.service.spec.ts
+│   │   └── kubernetes.service.spec.ts
+│   ├── .env.example
+│   ├── .eslintrc.js
+│   ├── nest-cli.json
+│   ├── package.json
+│   └── tsconfig.json
+│
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── MetricsDashboard.tsx
+│   │   │   ├── DeploymentManager.tsx
+│   │   │   ├── MetricsChart.tsx
+│   │   │   └── StatusOverview.tsx
 │   │   ├── pages/
+│   │   │   ├── index.tsx
+│   │   │   ├── login.tsx
+│   │   │   └── deployments.tsx
 │   │   ├── hooks/
+│   │   │   ├── useWebSocket.ts
+│   │   │   ├── useAuth.ts
+│   │   │   └── useDeployments.ts
 │   │   └── utils/
-│   └── package.json
+│   │       ├── auth.ts
+│   │       └── api.ts
+│   ├── .env.example
+│   ├── .eslintrc.js
+│   ├── next.config.js
+│   ├── package.json
+│   ├── tailwind.config.js
+│   └── tsconfig.json
+│
 ├── k8s/
 │   ├── development/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   ├── secrets.yaml
+│   │   └── ingress.yaml
 │   └── production/
-└── docker/
+│       ├── deployment.yaml
+│       ├── service.yaml
+│       ├── secrets.yaml
+│       └── ingress.yaml
+│
+├── docker/
+│   ├── Dockerfile.backend
+│   └── Dockerfile.frontend
+│
+├── .gitignore
+├── docker-compose.yml
+└── README.md
 ```
-
-## Prerequisites
-
-- Node.js >= 18
-- Docker
-- Kubernetes cluster
-- PostgreSQL
-- Redis
 
 ## Getting Started
 
-### 1. Clone the Repository
+### Prerequisites
+- Node.js >= 18
+- Docker
+- Kubernetes cluster (local or remote)
+- kubectl configured with cluster access
+
+### Local Development Setup
+
+1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/container-management-dashboard.git
+git clone https://github.com/ceteongvanness/container-management-dashboard.git
 cd container-management-dashboard
 ```
 
-### 2. Backend Setup
+2. **Backend Setup**
 ```bash
 cd backend
-
-# Install dependencies
 npm install
-
-# Configure environment
-cp .env.example .env
-
-# Start the development server
+cp .env.example .env  # Configure your environment variables
 npm run start:dev
 ```
 
-Required environment variables:
-```env
-# Backend .env
-PORT=3000
-JWT_SECRET=your_secret
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASS=password
-REDIS_HOST=localhost
-REDIS_PORT=6379
-```
-
-### 3. Frontend Setup
+3. **Frontend Setup**
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Configure environment
-cp .env.example .env
-
-# Start the development server
+cp .env.example .env  # Configure your environment variables
 npm run dev
 ```
 
-Required environment variables:
-```env
-# Frontend .env
-NEXT_PUBLIC_API_URL=http://localhost:3000
-```
-
-### 4. Docker Setup
+4. **Deploy to Kubernetes**
 ```bash
-# Build and run with Docker Compose
-docker-compose up -d
-```
-
-### 5. Kubernetes Deployment
-```bash
-# Create namespace
-kubectl create namespace container-dashboard
-
-# Apply configurations
 kubectl apply -f k8s/development/
 ```
 
-## Development
-
-### Backend Development
-```bash
-cd backend
-
-# Run tests
-npm run test
-
-# Run e2e tests
-npm run test:e2e
-
-# Run linter
-npm run lint
-```
-
-### Frontend Development
-```bash
-cd frontend
-
-# Run tests
-npm run test
-
-# Run linter
-npm run lint
-```
-
-## API Routes
-
-### Auth Routes
-- `POST /auth/login` - User authentication
-- `GET /auth/profile` - Get user profile
-
-### Deployment Routes
-- `GET /deployments` - List all deployments
-- `POST /deployments` - Create new deployment
-- `PUT /deployments/:name` - Update deployment
-- `DELETE /deployments/:name` - Delete deployment
-- `GET /deployments/:name/logs` - Get deployment logs
-- `POST /deployments/:name/scale` - Scale deployment
-
-### Metrics Routes
-- `GET /metrics` - Get current metrics
-- `GET /metrics/summary` - Get metrics summary
-- `GET /metrics/history` - Get historical metrics
-
-## Technologies Used
-
-### Backend
-- NestJS
-- TypeScript
-- Kubernetes Client
-- JWT Authentication
-- WebSocket
-- PostgreSQL
-- Redis
-
-### Frontend
-- React/Next.js
-- TypeScript
-- TailwindCSS
-- Recharts
-- WebSocket Client
-
-### Infrastructure
-- Docker
-- Kubernetes
-- GitHub Actions
-
-## Features
-
-### Authentication & Authorization
-- JWT-based authentication
-- Role-based access control (RBAC)
-- Secure password handling
-- Session management
-
-### Deployment Management
-- Create/Update/Delete deployments
-- Scale deployments
-- View deployment logs
-- Resource management
-
-### Metrics & Monitoring
-- Real-time metrics via WebSocket
-- Historical metrics tracking
-- Resource usage visualization
-- Status monitoring
-
-### CI/CD
-- Automated testing
-- Docker image building
-- Kubernetes deployment
-- Environment management
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## Running Tests
-
+### Running Tests
 ```bash
 # Backend tests
 cd backend
 npm run test
-npm run test:e2e
-npm run test:cov
 
 # Frontend tests
 cd frontend
 npm run test
 ```
 
-## Environment Variables
+## API Documentation
+API documentation is available at `http://localhost:3000/api-docs` when running the backend locally.
 
-### Backend Variables
-```env
-PORT=3000
-JWT_SECRET=your_secret
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASS=password
-REDIS_HOST=localhost
-REDIS_PORT=6379
-KUBERNETES_CONFIG=path/to/config
-```
+## Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### Frontend Variables
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
-NEXT_PUBLIC_WS_URL=ws://localhost:3000
-```
+## Architecture Overview
+
+### Backend Services
+- **AuthService**: Handles authentication and authorization
+- **KubernetesService**: Manages container deployments and updates
+- **MetricsService**: Collects and processes container metrics
+- **WebSocketService**: Manages real-time updates
+
+### Frontend Components
+- **Dashboard**: Main monitoring interface
+- **DeploymentManager**: Container deployment interface
+- **MetricsViewer**: Resource usage visualization
+- **UserManagement**: User and role management interface
+
+## Security Features
+- JWT-based authentication
+- Role-based access control (RBAC)
+- Kubernetes RBAC integration
+- API rate limiting
+- Input validation and sanitization
+
+## Monitoring and Logging
+- Prometheus integration for metrics
+- ELK stack for log aggregation
+- Health check endpoints
+- Error tracking and reporting
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Kubernetes Client Library
-- NestJS Framework
-- React/Next.js
-- TailwindCSS
-
-## Support
-
-For support, please open an issue in the GitHub repository.
