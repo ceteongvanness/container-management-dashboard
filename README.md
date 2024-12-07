@@ -70,7 +70,7 @@ A production-ready container management dashboard demonstrating modern cloud-nat
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/container-management-dashboard.git
+git clone https://github.com/ceteongvanness/container-management-dashboard.git
 cd container-management-dashboard
 ```
 
