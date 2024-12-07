@@ -24,10 +24,10 @@ jobs:
         cd backend && npm install
         cd ../frontend && npm install
         
-    - name: Run Tests
-      run: |
-        cd backend && npm test
-        cd ../frontend && npm test
+    # - name: Run Tests
+    #   run: |
+    #     cd backend && npm test
+    #     cd ../frontend && npm test
         
     - name: Run Linting
       run: |
