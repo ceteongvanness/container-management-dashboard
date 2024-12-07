@@ -1,14 +1,15 @@
 // frontend/src/hooks/useDeployments.ts
 import { useState, useEffect } from 'react';
 import { api } from '../utils/api';
+import { Deployment } from '../types/types';
 
 export function useDeployments() {
-  const [deployments, setDeployments] = useState([]);
+  const [deployments, setDeployments] = useState<Deployment[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchDeployments = async () => {
     try {
-      const { data } = await api.get('/deployments');
+      const { data } = await api.get<Deployment[]>('/deployments');
       setDeployments(data);
     } catch (error) {
       console.error('Failed to fetch deployments:', error);
@@ -17,7 +18,7 @@ export function useDeployments() {
     }
   };
 
-  const createDeployment = async (deploymentConfig) => {
+  const createDeployment = async (deploymentConfig: Omit<Deployment, 'status'>) => {
     try {
       await api.post('/deployments', deploymentConfig);
       await fetchDeployments();
