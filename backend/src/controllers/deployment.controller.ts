@@ -1,10 +1,9 @@
 // backend/src/controllers/deployment.controller.ts
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { KubernetesService } from '../services/kubernetes.service';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard, RolesGuard, Roles } from '../auth';
+import { KubernetesService } from '../services';
 import { DeploymentConfig } from '../types/types';
+import * as k8s from '@kubernetes/client-node';
 
 @Controller('deployments')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -12,13 +11,15 @@ export class DeploymentController {
   constructor(private readonly kubernetesService: KubernetesService) {}
 
   @Get()
-  async getAllDeployments(@Query('namespace') namespace: string = 'default') {
+  async getAllDeployments(
+    @Query('namespace') namespace: string = 'default'
+  ): Promise<k8s.V1DeploymentList> {
     return await this.kubernetesService.listDeployments(namespace);
   }
 
   @Post()
   @Roles('admin')
-  async createDeployment(@Body() config: DeploymentConfig) {
+  async createDeployment(@Body() config: DeploymentConfig): Promise<k8s.V1Deployment> {
     return await this.kubernetesService.createDeployment(config);
   }
 
@@ -27,7 +28,7 @@ export class DeploymentController {
   async updateDeployment(
     @Param('name') name: string,
     @Body() config: DeploymentConfig
-  ) {
+  ): Promise<k8s.V1Deployment> {
     return await this.kubernetesService.updateDeployment(name, config);
   }
 
@@ -36,7 +37,7 @@ export class DeploymentController {
   async deleteDeployment(
     @Param('name') name: string,
     @Query('namespace') namespace: string = 'default'
-  ) {
+  ): Promise<k8s.V1Status> {
     return await this.kubernetesService.deleteDeployment(name, namespace);
   }
 }

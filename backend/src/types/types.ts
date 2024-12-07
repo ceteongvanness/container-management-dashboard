@@ -11,7 +11,6 @@ export interface User {
     namespace?: string;
     image: string;
     replicas: number;
-    labels?: Record<string, string>;
     ports?: Array<{
       containerPort: number;
       protocol?: string;
@@ -32,25 +31,32 @@ export interface User {
     };
   }
   
-  export interface ContainerMetrics {
-    containerId: string;
+  export interface DeploymentMetrics {
     name: string;
-    namespace: string;
-    status: 'running' | 'stopped' | 'failed';
-    cpu: {
-      usage: number;
-      limit: number;
-      percentage: number;
+    replicas: {
+      desired: number;
+      available: number;
     };
-    memory: {
-      usage: number;
-      limit: number;
-      percentage: number;
-    };
-    network: {
-      rxBytes: number;
-      txBytes: number;
-    };
-    restarts: number;
-    startTime: Date;
+    status: any[];
+    age: Date;
+  }
+  
+  export interface MetricSummary {
+    totalDeployments: number;
+    healthyDeployments: number;
+  }
+  
+  export interface MetricsHistory {
+    timestamp: Date;
+    metrics: DeploymentMetrics[];
+  }
+  
+  export interface LoginCredentials {
+    username: string;
+    password: string;
+  }
+  
+  export interface AuthResponse {
+    access_token: string;
+    user: Omit<User, 'password'>;
   }
