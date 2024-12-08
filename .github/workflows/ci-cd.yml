@@ -82,6 +82,7 @@ jobs:
       run: |
         echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > kubeconfig
         export KUBECONFIG=./kubeconfig
+        kubectl create namespace container-dashboard --dry-run=client -o yaml | kubectl apply -f -
         kubectl apply -f k8s/production/
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
