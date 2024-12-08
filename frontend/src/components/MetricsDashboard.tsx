@@ -1,19 +1,21 @@
-// frontend/src/components/MetricsDashboard.tsx
+// src/components/MetricsDashboard.tsx
 import React from 'react';
-import { MetricsChart } from './MetricsChart';
-import { StatusOverview } from './StatusOverview';
 import { useWebSocket } from '../hooks/useWebSocket';
-import { ContainerMetrics } from '../types/types';
 
-const MetricsDashboard: React.FC = () => {
-  const { data: metrics } = useWebSocket<ContainerMetrics[]>('ws://localhost:3000/metrics');
+const MetricsDashboard = () => {
+  const { data: metrics } = useWebSocket<any>('ws://localhost:3000/metrics');
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Container Dashboard</h1>
-      <StatusOverview metrics={metrics || []} />
-      <div className="mt-6">
-        <MetricsChart metrics={metrics || []} />
+    <div className="space-y-4">
+      <div className="bg-white shadow rounded-lg p-6">
+        <h2 className="text-xl font-semibold mb-4">Container Metrics</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Placeholder for metrics */}
+          <div className="bg-blue-50 p-4 rounded">
+            <h3 className="font-medium">Total Containers</h3>
+            <p className="text-2xl font-bold">{metrics?.length || 0}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
