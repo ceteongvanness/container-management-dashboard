@@ -1,0 +1,27 @@
+# k8s/production/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: container-dashboard
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: container-dashboard
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: backend
+---
