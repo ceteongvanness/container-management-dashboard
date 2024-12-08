@@ -62,10 +62,7 @@ export class KubernetesService {
     return response.body;
   }
 
-  async updateDeployment(
-    name: string,
-    config: DeploymentConfig,
-  ): Promise<k8s.V1Deployment> {
+  async updateDeployment(name: string, config: DeploymentConfig): Promise<k8s.V1Deployment> {
     const deployment: k8s.V1Deployment = {
       metadata: {
         name: config.name,
@@ -107,14 +104,8 @@ export class KubernetesService {
     return response.body;
   }
 
-  async deleteDeployment(
-    name: string,
-    namespace = 'default',
-  ): Promise<k8s.V1Status> {
-    const response = await this.k8sAppsApi.deleteNamespacedDeployment(
-      name,
-      namespace,
-    );
+  async deleteDeployment(name: string, namespace = 'default'): Promise<k8s.V1Status> {
+    const response = await this.k8sAppsApi.deleteNamespacedDeployment(name, namespace);
     return response.body;
   }
 }

@@ -2,11 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { KubernetesService } from './kubernetes.service';
 import * as k8s from '@kubernetes/client-node';
-import {
-  DeploymentMetrics,
-  MetricSummary,
-  MetricsHistory,
-} from '../types/types';
+import { DeploymentMetrics, MetricSummary, MetricsHistory } from '../types/types';
 
 @Injectable()
 export class MetricsService {
@@ -29,16 +25,11 @@ export class MetricsService {
     const metrics = await this.getMetrics(namespace);
     return {
       totalDeployments: metrics.length,
-      healthyDeployments: metrics.filter(
-        (m) => m.replicas.available === m.replicas.desired,
-      ).length,
+      healthyDeployments: metrics.filter((m) => m.replicas.available === m.replicas.desired).length,
     };
   }
 
-  async getMetricsHistory(
-    namespace = 'default',
-    duration = '1h',
-  ): Promise<MetricsHistory[]> {
+  async getMetricsHistory(namespace = 'default', duration = '1h'): Promise<MetricsHistory[]> {
     const endTime = new Date();
     const startTime = this.parseDurationToDate(duration);
     const intervals = this.generateTimeIntervals(startTime, endTime);

@@ -1,15 +1,5 @@
 // backend/src/controllers/deployment.controller.ts
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard, RolesGuard, Roles } from '../auth';
 import { KubernetesService } from '../services';
 import { DeploymentConfig } from '../types/types';
@@ -29,9 +19,7 @@ export class DeploymentController {
 
   @Post()
   @Roles('admin')
-  async createDeployment(
-    @Body() config: DeploymentConfig,
-  ): Promise<k8s.V1Deployment> {
+  async createDeployment(@Body() config: DeploymentConfig): Promise<k8s.V1Deployment> {
     return await this.kubernetesService.createDeployment(config);
   }
 

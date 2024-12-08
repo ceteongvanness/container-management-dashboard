@@ -3,12 +3,13 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     parserOptions: {
       project: 'tsconfig.json',
+      tsconfigRootDir: __dirname,
       sourceType: 'module',
     },
     plugins: ['@typescript-eslint/eslint-plugin'],
     extends: [
-      'plugin:@typescript-eslint/recommended',
-      'plugin:prettier/recommended',
+      'eslint:recommended',
+      'plugin:@typescript-eslint/recommended'
     ],
     root: true,
     env: {
@@ -25,6 +26,6 @@ module.exports = {
         'argsIgnorePattern': '^_',
         'varsIgnorePattern': '^_',
         'ignoreRestSiblings': true 
-      }],
+      }]
     },
   };
