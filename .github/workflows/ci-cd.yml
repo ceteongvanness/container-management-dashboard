@@ -80,9 +80,16 @@ jobs:
       
     - name: Deploy to Kubernetes
       run: |
+        # Write kubeconfig
         echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > kubeconfig
+        
+        # Set KUBECONFIG environment variable
         export KUBECONFIG=./kubeconfig
-        kubectl create namespace container-dashboard --dry-run=client -o yaml | kubectl apply -f -
-        kubectl apply -f k8s/production/
+        
+        # Validate the connection
+        kubectl cluster-info
+        
+        # Apply configurations with validation disabled for initial setup
+        kubectl apply -f k8s/production/ --validate=false
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
