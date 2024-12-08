@@ -1,16 +1,15 @@
 // frontend/next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
-    swcMinify: true,
-    async rewrites() {
-      return [
-        {
-          source: '/api/:path*',
-          destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`
-        }
-      ];
-    }
-}
+  reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:3000/:path*'  // Backend URL
+      }
+    ];
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
