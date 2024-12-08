@@ -4,7 +4,7 @@
 A modern container management dashboard that demonstrates cloud-native development practices and container orchestration capabilities. This project showcases a scalable Platform-as-a-Service (PaaS) architecture similar to enterprise-grade container management systems.
 
 ## Demo
-![](https://github.com/ceteongvanness/container-management-dashboard)
+![](https://github.com/ceteongvanness/container-management-dashboard/blob/main/images/screencapture-localhost-3001-2024-12-08-11_41_34.png)
 
 ## Features
 - 🔄 Real-time container metrics monitoring
