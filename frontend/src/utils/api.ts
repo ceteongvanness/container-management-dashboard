@@ -1,14 +1,13 @@
-// src/utils/api.ts
+// frontend/src/utils/api.ts
 import axios from 'axios';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add a request interceptor
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -17,4 +16,4 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export { api };
+export default api;
