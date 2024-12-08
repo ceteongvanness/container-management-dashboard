@@ -8,11 +8,19 @@ import { User, AuthResponse } from '../types/types';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async validateUser(username: string, password: string): Promise<Omit<User, 'password'> | null> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<Omit<User, 'password'> | null> {
     const user = await this.findUser(username);
-    if (user && user.password && await bcrypt.compare(password, user.password)) {
-      const { password: _, ...result } = user;
-      return result;
+    if (
+      user &&
+      user.password &&
+      (await bcrypt.compare(password, user.password))
+    ) {
+      // Create a new object without the password
+      const { id, username: name, roles } = user;
+      return { id, username: name, roles };
     }
     return null;
   }
@@ -22,15 +30,15 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { 
-      username: user.username, 
+    const payload = {
+      username: user.username,
       sub: user.id,
-      roles: user.roles
+      roles: user.roles,
     };
 
     return {
       access_token: this.jwtService.sign(payload),
-      user
+      user,
     };
   }
 

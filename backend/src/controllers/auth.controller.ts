@@ -1,5 +1,13 @@
 // backend/src/controllers/auth.controller.ts
-import { Controller, Post, Get, Body, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Request,
+  UseGuards,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService, JwtAuthGuard } from '../auth';
 import { LoginCredentials, AuthResponse } from '../types/types';
 import { Request as ExpressRequest } from 'express';
@@ -12,7 +20,7 @@ export class AuthController {
   async login(@Body() credentials: LoginCredentials): Promise<AuthResponse> {
     const user = await this.authService.validateUser(
       credentials.username,
-      credentials.password
+      credentials.password,
     );
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');

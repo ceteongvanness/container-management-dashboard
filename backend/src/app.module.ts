@@ -7,17 +7,8 @@ import { MetricsController } from './controllers/metrics.controller';
 import { KubernetesService, MetricsService } from './services';
 
 @Module({
-  imports: [
-    AuthModule,
-  ],
-  controllers: [
-    AuthController,
-    DeploymentController,
-    MetricsController,
-  ],
-  providers: [
-    KubernetesService,
-    MetricsService,
-  ],
+  imports: [AuthModule],
+  controllers: [AuthController, DeploymentController, MetricsController],
+  providers: [KubernetesService, MetricsService],
 })
 export class AppModule {}

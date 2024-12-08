@@ -16,7 +16,7 @@ export class KubernetesService {
     this.k8sAppsApi = this.kc.makeApiClient(k8s.AppsV1Api);
   }
 
-  async listDeployments(namespace: string = 'default'): Promise<k8s.V1DeploymentList> {
+  async listDeployments(namespace = 'default'): Promise<k8s.V1DeploymentList> {
     const response = await this.k8sAppsApi.listNamespacedDeployment(namespace);
     return response.body;
   }
@@ -57,12 +57,15 @@ export class KubernetesService {
 
     const response = await this.k8sAppsApi.createNamespacedDeployment(
       config.namespace || 'default',
-      deployment
+      deployment,
     );
     return response.body;
   }
 
-  async updateDeployment(name: string, config: DeploymentConfig): Promise<k8s.V1Deployment> {
+  async updateDeployment(
+    name: string,
+    config: DeploymentConfig,
+  ): Promise<k8s.V1Deployment> {
     const deployment: k8s.V1Deployment = {
       metadata: {
         name: config.name,
@@ -99,13 +102,19 @@ export class KubernetesService {
     const response = await this.k8sAppsApi.replaceNamespacedDeployment(
       name,
       config.namespace || 'default',
-      deployment
+      deployment,
     );
     return response.body;
   }
 
-  async deleteDeployment(name: string, namespace: string = 'default'): Promise<k8s.V1Status> {
-    const response = await this.k8sAppsApi.deleteNamespacedDeployment(name, namespace);
+  async deleteDeployment(
+    name: string,
+    namespace = 'default',
+  ): Promise<k8s.V1Status> {
+    const response = await this.k8sAppsApi.deleteNamespacedDeployment(
+      name,
+      namespace,
+    );
     return response.body;
   }
 }
