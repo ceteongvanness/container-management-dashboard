@@ -1,4 +1,4 @@
-// frontend/src/hooks/useWebSocket.ts
+// src/hooks/useWebSocket.ts
 import { useState, useEffect } from 'react';
 
 export function useWebSocket<T>(url: string) {
@@ -12,12 +12,12 @@ export function useWebSocket<T>(url: string) {
       try {
         const parsedData = JSON.parse(event.data);
         setData(parsedData);
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to parse WebSocket data'));
+      } catch (_error) {
+        setError(new Error('Failed to parse WebSocket data'));
       }
     };
 
-    ws.onerror = (event) => {
+    ws.onerror = (_error) => {
       setError(new Error('WebSocket error'));
     };
 
